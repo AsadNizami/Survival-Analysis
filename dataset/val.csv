@@ -1,0 +1,21 @@
+,Patient Identifier,Overall Survival Status,Disease Free Status,Overall Survival (Months),Embeddings path
+62,TCGA-A2-A0YH,0:LIVING,,21.65,/home/ubuntu/Documents/internship/dataset/dead-living-feature-embd-wsi/TCGA-A2-A0YH_features.npy
+33,TCGA-B6-A0X0,1:DECEASED,1:Recurred/Progressed,129.6,/home/ubuntu/Documents/internship/dataset/dead-living-feature-embd-wsi/TCGA-B6-A0X0_features.npy
+59,TCGA-A2-A0YC,0:LIVING,,32.52,/home/ubuntu/Documents/internship/dataset/dead-living-feature-embd-wsi/TCGA-A2-A0YC_features.npy
+81,TCGA-A8-A09V,0:LIVING,,15.01,/home/ubuntu/Documents/internship/dataset/dead-living-feature-embd-wsi/TCGA-A8-A09V_features.npy
+72,TCGA-A8-A06N,0:LIVING,,0.0,/home/ubuntu/Documents/internship/dataset/dead-living-feature-embd-wsi/TCGA-A8-A06N_features.npy
+35,TCGA-B6-A0X4,1:DECEASED,1:Recurred/Progressed,28.25,/home/ubuntu/Documents/internship/dataset/dead-living-feature-embd-wsi/TCGA-B6-A0X4_features.npy
+54,TCGA-A2-A0EU,0:LIVING,,34.26,/home/ubuntu/Documents/internship/dataset/dead-living-feature-embd-wsi/TCGA-A2-A0EU_features.npy
+82,TCGA-A8-A09W,0:LIVING,,0.99,/home/ubuntu/Documents/internship/dataset/dead-living-feature-embd-wsi/TCGA-A8-A09W_features.npy
+77,TCGA-A8-A08X,0:LIVING,,42.97,/home/ubuntu/Documents/internship/dataset/dead-living-feature-embd-wsi/TCGA-A8-A08X_features.npy
+44,TCGA-E2-A2P5,1:DECEASED,1:Recurred/Progressed,26.97,/home/ubuntu/Documents/internship/dataset/dead-living-feature-embd-wsi/TCGA-E2-A2P5_features.npy
+8,TCGA-A7-A13E,1:DECEASED,1:Recurred/Progressed,20.17,/home/ubuntu/Documents/internship/dataset/dead-living-feature-embd-wsi/TCGA-A7-A13E_features.npy
+91,TCGA-AN-A0AS,0:LIVING,,0.33,/home/ubuntu/Documents/internship/dataset/dead-living-feature-embd-wsi/TCGA-AN-A0AS_features.npy
+42,TCGA-E2-A1LE,1:DECEASED,1:Recurred/Progressed,28.88,/home/ubuntu/Documents/internship/dataset/dead-living-feature-embd-wsi/TCGA-E2-A1LE_features.npy
+9,TCGA-A8-A08T,1:DECEASED,1:Recurred/Progressed,111.99,/home/ubuntu/Documents/internship/dataset/dead-living-feature-embd-wsi/TCGA-A8-A08T_features.npy
+61,TCGA-A2-A0YF,0:LIVING,,50.43,/home/ubuntu/Documents/internship/dataset/dead-living-feature-embd-wsi/TCGA-A2-A0YF_features.npy
+84,TCGA-AC-A2B8,0:LIVING,,22.24,/home/ubuntu/Documents/internship/dataset/dead-living-feature-embd-wsi/TCGA-AC-A2B8_features.npy
+74,TCGA-A8-A07L,0:LIVING,,32.03,/home/ubuntu/Documents/internship/dataset/dead-living-feature-embd-wsi/TCGA-A8-A07L_features.npy
+60,TCGA-A2-A0YE,0:LIVING,,18.2,/home/ubuntu/Documents/internship/dataset/dead-living-feature-embd-wsi/TCGA-A2-A0YE_features.npy
+2,TCGA-A2-A0CM,1:DECEASED,1:Recurred/Progressed,24.77,/home/ubuntu/Documents/internship/dataset/dead-living-feature-embd-wsi/TCGA-A2-A0CM_features.npy
+40,TCGA-D8-A73W,1:DECEASED,1:Recurred/Progressed,12.65,/home/ubuntu/Documents/internship/dataset/dead-living-feature-embd-wsi/TCGA-D8-A73W_features.npy
