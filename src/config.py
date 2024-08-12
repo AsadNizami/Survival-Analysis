@@ -10,10 +10,7 @@ LR = 0.001
 EPOCHS = 15
 
 PATCH_DIR = '/home/ubuntu/Documents/internship/dataset/patches'
-# df = pd.read_csv(
-#     '/home/ubuntu/Documents/survival analysis/dataset/survivor_final.csv')
-# df = df.sample(frac=1)
-split = 80
+# split = 80
 
 train_set, val_set = pd.read_csv('../dataset/train.csv'), pd.read_csv('../dataset/val.csv')
 

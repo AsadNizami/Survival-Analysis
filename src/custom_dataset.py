@@ -56,6 +56,7 @@ class WSISurvivalDataset(Dataset):
             self.selected_files[patient_data['Patient Identifier']], wsi_path)
         patches_tensor = torch.stack(
             [self._process_patch(patch) for patch in patches])
+        
         label = torch.tensor([time, event], dtype=torch.float)
 
         return patches_tensor, label

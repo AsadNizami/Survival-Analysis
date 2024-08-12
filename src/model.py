@@ -38,11 +38,11 @@ class WSISurvivalModel(nn.Module):
         self.bn3 = nn.BatchNorm1d(64)
         self.dropout3 = nn.Dropout(0.5)
 
-        self.fc4 = nn.Linear(64, 16)
-        self.bn4 = nn.BatchNorm1d(16)
-        self.dropout4 = nn.Dropout(0.3)
+        self.fc4 = nn.Linear(64, 32)
+        self.bn4 = nn.BatchNorm1d(32)
+        self.dropout4 = nn.Dropout(0.5)
         
-        self.fc5 = nn.Linear(16, 1)
+        self.fc5 = nn.Linear(32, 1)
 
     def forward(self, x):
         batch_size, num_patches = x.size(0), x.size(1)
