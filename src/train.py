@@ -5,7 +5,8 @@ from model import WSISurvivalModel
 from metrics import cox_loss, calculate_cindex
 from custom_dataset import WSISurvivalDataset
 from torch.utils.data import DataLoader
-from config import IMG_SIZE, BATCH, train_set, val_set, LR, EPOCHS, track, SAVE_PATH, track_dict, TRACKER_CSV_NAME
+from torchsummary import summary
+from config import IMG_SIZE, BATCH, train_set, val_set, LR, EPOCHS, track, SAVE_PATH, track_dict, TRACKER_CSV_NAME, NUM_PATCHES
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -21,7 +22,7 @@ transform = transforms.Compose([
 ])
 
 model = WSISurvivalModel().to(device)
-# summary(model, (num_patches, *IMG_SIZE, 3))
+# summary(model, (NUM_PATCHES, *IMG_SIZE, 3))
 
 train_loader = DataLoader(
     WSISurvivalDataset(train_set, transform=transform),
@@ -37,6 +38,8 @@ optimizer = torch.optim.Adam(model.parameters(), lr=LR)
 best_cindex = 0
 
 for epoch in range(EPOCHS):
+    model.train()
+
     train_loss = 0
     for batch_x, batch_y in train_loader:
         batch_x, batch_y = batch_x.to(device), batch_y.to(device)
@@ -47,8 +50,11 @@ for epoch in range(EPOCHS):
         optimizer.step()
         train_loss += loss.item()
 
-    train_cindex = calculate_cindex(model, train_loader, device)
-    val_cindex = calculate_cindex(model, val_loader, device)
+    model.eval()
+
+    with torch.no_grad():
+        train_cindex = calculate_cindex(model, train_loader, device)
+        val_cindex = calculate_cindex(model, val_loader, device)
 
     train_loss = train_loss / len(train_loader)
 

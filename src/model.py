@@ -23,35 +23,40 @@ class WSISurvivalModel(nn.Module):
         for param in list(self.patch_encoder.parameters()):
             param.requires_grad = False
 
-        self.cbam = CBAM(1024)  # change according to encoder output dimension
-        self.attention = AttentionLayer(1024)  # change according to encoder output dimension
-        
-        self.fc1 = nn.Linear(1024, 256)  # change according to encoder output dimension
-        self.bn1 = nn.BatchNorm1d(256)
+        self.cbam = CBAM(1024)  # Change according to encoder output dimension
+        self.attention = AttentionLayer(1024)  # Change according to encoder output dimension
+
+        # LSTM parameters
+        self.lstm = nn.LSTM(input_size=1024, hidden_size=256, num_layers=2, batch_first=True, dropout=0.5)
+
+        self.fc1 = nn.Linear(256, 128)
+        self.bn1 = nn.BatchNorm1d(128)
         self.dropout1 = nn.Dropout(0.5)
-        
-        self.fc2 = nn.Linear(256, 128)
-        self.bn2 = nn.BatchNorm1d(128)
+
+        self.fc2 = nn.Linear(128, 64)
+        self.bn2 = nn.BatchNorm1d(64)
         self.dropout2 = nn.Dropout(0.5)
-        
-        self.fc3 = nn.Linear(128, 64)
-        self.bn3 = nn.BatchNorm1d(64)
+
+        self.fc3 = nn.Linear(64, 32)
+        self.bn3 = nn.BatchNorm1d(32)
         self.dropout3 = nn.Dropout(0.5)
 
-        self.fc4 = nn.Linear(64, 32)
-        self.bn4 = nn.BatchNorm1d(32)
-        self.dropout4 = nn.Dropout(0.5)
-        
-        self.fc5 = nn.Linear(32, 1)
+        self.fc4 = nn.Linear(32, 1)
 
     def forward(self, x):
         batch_size, num_patches = x.size(0), x.size(1)
+
         x = x.view(batch_size * num_patches, 3, *(IMG_SIZE))
         x = self.patch_encoder(x)
         x = x.view(batch_size, num_patches, -1)
+
         x = self.cbam(x)
         x, attention_weights = self.attention(x)
 
+        # Pass through LSTM
+        x, (h_n, c_n) = self.lstm(x)  # LSTM output
+
+        # Use the last hidden state for classification
         x = F.relu(self.bn1(self.fc1(x)))
         x = self.dropout1(x)
 
@@ -61,9 +66,6 @@ class WSISurvivalModel(nn.Module):
         x = F.relu(self.bn3(self.fc3(x)))
         x = self.dropout3(x)
 
-        x = F.relu(self.bn4(self.fc4(x)))
-        x = self.dropout4(x)
+        x = self.fc4(x)
 
-        x = self.fc5(x)
-
-        return x, None  # attention_weights
+        return x, None

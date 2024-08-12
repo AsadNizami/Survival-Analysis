@@ -14,7 +14,7 @@ def cox_loss(prediction, y_true):
 
 
 def calculate_cindex(model, data_loader, device):
-    model.eval()
+    # model.eval()
     all_preds = []
     all_times = []
     all_events = []

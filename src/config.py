@@ -25,7 +25,7 @@ else:
     track = pd.DataFrame()
 
 track_dict = OrderedDict({
-    'Model': 'uni_update_max',
+    'Model': 'del',
     'resolution': IMG_SIZE[0],
     'Pretrained layer changed': 0,
     'Batch': BATCH,
