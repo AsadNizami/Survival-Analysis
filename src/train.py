@@ -2,11 +2,13 @@ import torch
 import pandas as pd
 from torchvision import transforms
 from model import WSISurvivalModel
-from metrics import cox_loss, calculate_cindex
+from metrics import calculate_cindex, combined_cox_ranking_loss, hazard_loss
 from custom_dataset import WSISurvivalDataset
 from torch.utils.data import DataLoader
-from torchsummary import summary
+# from torchsummary import summary
 from config import IMG_SIZE, BATCH, train_set, val_set, LR, EPOCHS, track, SAVE_PATH, track_dict, TRACKER_CSV_NAME, NUM_PATCHES
+from tqdm import tqdm
+from torchinfo import summary
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -22,30 +24,34 @@ transform = transforms.Compose([
 ])
 
 model = WSISurvivalModel().to(device)
-# summary(model, (NUM_PATCHES, *IMG_SIZE, 3))
+summary(model, (BATCH, NUM_PATCHES, 3, *IMG_SIZE))
 
 train_loader = DataLoader(
     WSISurvivalDataset(train_set, transform=transform),
-    batch_size=BATCH, shuffle=True, num_workers=4
+    batch_size=BATCH, shuffle=True, num_workers=2
 )
 
 val_loader = DataLoader(
     WSISurvivalDataset(val_set, transform=transform),
-    batch_size=BATCH, shuffle=True, num_workers=4
+    batch_size=BATCH, shuffle=True, num_workers=2
 )
 
 optimizer = torch.optim.Adam(model.parameters(), lr=LR)
 best_cindex = 0
 
+# lambda_param = torch.nn.Parameter(torch.tensor(1.0))
+# k = torch.nn.Parameter(torch.tensor(1.0))
+
 for epoch in range(EPOCHS):
     model.train()
 
     train_loss = 0
-    for batch_x, batch_y in train_loader:
+    for batch_x, batch_y in tqdm(train_loader):
         batch_x, batch_y = batch_x.to(device), batch_y.to(device)
         optimizer.zero_grad()
         outputs, attention_weights = model(batch_x)
-        loss = cox_loss(outputs, batch_y)
+        loss = combined_cox_ranking_loss(outputs, batch_y)
+        # loss = criterion(outputs, batch_y[0], batch_y[1])
         loss.backward()
         optimizer.step()
         train_loss += loss.item()

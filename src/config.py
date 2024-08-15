@@ -3,16 +3,17 @@ import os
 from collections import OrderedDict
 
 
-NUM_PATCHES = 300
+NUM_PATCHES = 250
 BATCH = 5
-IMG_SIZE = (128, 128)
-LR = 0.001
-EPOCHS = 15
+IMG_SIZE = (160, 160)
+LR = 0.0003
+EPOCHS = 10
 
 PATCH_DIR = '/home/ubuntu/Documents/internship/dataset/patches'
 # split = 80
 
-train_set, val_set = pd.read_csv('../dataset/train.csv'), pd.read_csv('../dataset/val.csv')
+# train_set, val_set = pd.read_csv('../dataset/train.csv'), pd.read_csv('../dataset/val.csv')
+data_comb = pd.read_csv('../dataset/survivor_final.csv')
 
 if not os.path.exists('logs'):
     os.makedirs('logs')
@@ -25,7 +26,7 @@ else:
     track = pd.DataFrame()
 
 track_dict = OrderedDict({
-    'Model': 'del',
+    'Model': 'uni_lstm_temp1',
     'resolution': IMG_SIZE[0],
     'Pretrained layer changed': 0,
     'Batch': BATCH,

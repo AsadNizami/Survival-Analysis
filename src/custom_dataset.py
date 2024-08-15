@@ -45,6 +45,9 @@ class WSISurvivalDataset(Dataset):
 
         patient_data = self.dataframe.iloc[idx]
         time = patient_data['Overall Survival (Months)']
+
+        # time = min(time, 6)
+
         event = np.uint8(patient_data['Overall Survival Status'][0])
 
         if event == 1:
