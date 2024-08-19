@@ -3,9 +3,9 @@ import os
 from collections import OrderedDict
 
 
-NUM_PATCHES = 250
+NUM_PATCHES = 300
 BATCH = 5
-IMG_SIZE = (160, 160)
+IMG_SIZE = (224, 224)
 LR = 0.0003
 EPOCHS = 10
 

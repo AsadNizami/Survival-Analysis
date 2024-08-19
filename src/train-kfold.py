@@ -7,11 +7,18 @@ from torchvision import transforms
 from timm.data.transforms_factory import create_transform
 from timm.data import resolve_data_config
 from model import WSISurvivalModel
-from metrics import calculate_cindex, combined_cox_ranking_loss
+from metrics import calculate_cindex, combined_cox_ranking_loss, negative_partial_log
 from custom_dataset import WSISurvivalDataset
 from config import IMG_SIZE, BATCH, LR, EPOCHS, PATCH_DIR, NUM_PATCHES, data_comb
 from tqdm import tqdm
 import timm
+from torchinfo import summary
+from transformers import AutoImageProcessor, ViTModel
+# from huggingface_hub import login
+# from conch.open_clip_custom import create_model_from_pretrained
+
+# from resnet import resnet200
+# from torchvision.models import resnet200
 
 
 def train_fold(model, train_loader, val_loader, optimizer, device, num_epochs):
@@ -23,7 +30,7 @@ def train_fold(model, train_loader, val_loader, optimizer, device, num_epochs):
             batch_x, batch_y = batch_x.to(device), batch_y.to(device)
             optimizer.zero_grad()
             outputs, _ = model(batch_x)
-            loss = combined_cox_ranking_loss(outputs, batch_y)
+            loss = negative_partial_log(outputs, batch_y)
             loss.backward()
             optimizer.step()
             train_loss += loss.item()
@@ -43,23 +50,45 @@ def train_fold(model, train_loader, val_loader, optimizer, device, num_epochs):
     return best_val_cindex
 
 def main():
+    # login()
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f'Using device: {device}')
 
     pretrained_model = timm.create_model(
+            # 'hf-hub:1aurent/vit_small_patch16_224.transpath_mocov3',
             "hf-hub:MahmoodLab/uni",
+            # 'hf-hub:1aurent/resnet18.tiatoolbox-kather100k',
+            # "hf_hub:prov-gigapath/prov-gigapath",
             pretrained=True,
+            num_classes=0,
             init_values=1e-5,
-            dynamic_img_size=True)
-    
-    transform = create_transform(**resolve_data_config(pretrained_model.pretrained_cfg, model=pretrained_model))
+            dynamic_img_size=True
+            )
 
-    
-    # transform = transforms.Compose([
-    #     transforms.Resize(IMG_SIZE),
-    #     transforms.ToTensor(),
-    #     transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
-    # ])
+    # pretrained_model, transform = create_model_from_pretrained('conch_ViT-B-16', "hf_hub:MahmoodLab/conch", hf_auth_token="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")
+
+    # pretrained_model = timm.create_model("hf_hub:prov-gigapath/prov-gigapath", pretrained=True)
+    # transform = AutoImageProcessor.from_pretrained("owkin/phikon")
+    pretrained_model = ViTModel.from_pretrained("owkin/phikon", add_pooling_layer=False)
+
+    # transform = create_transform(**resolve_data_config(pretrained_model.pretrained_cfg, model=pretrained_model))
+    summary(WSISurvivalModel(pretrained_model), (BATCH, NUM_PATCHES, 3, *IMG_SIZE))
+
+    # dic = {
+    #     'sample_input_D': 3,
+    #     'sample_input_H': 128,
+    #     'sample_input_W': 128,
+    #     'num_seg_classes':0
+    # }
+
+    # pretrained_model = resnet200(**dic)
+    # pretrained_model.load_state_dict(torch.load('/home/ubuntu/Documents/survival analysis/dataset/MedicalNet_pytorch_files2/pretrain/resnet_200.pth')['state_dict'])
+
+    transform = transforms.Compose([
+        transforms.Resize(IMG_SIZE),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    ])
 
     dataset = WSISurvivalDataset(data_comb, transform=transform)
 
